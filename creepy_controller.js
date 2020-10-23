@@ -1,6 +1,6 @@
-var roleHarvester = require('role_harvester');
-var roleUpgrader = require('role_upgrader');
-var roleBuilder = require('role_builder');
+var roleHarvester = require('role_harvey');
+var roleUpgrader = require('role_uppity');
+var roleBuilder = require('role_bob');
 
 //add how many creeps total in dict
 //run all functions
@@ -11,7 +11,7 @@ module.exports = {
         //max amounts of creeps per role initially
         var max_harvesters = 4;
         var max_upgraders = 4;
-        var max_builders = 3;
+        var max_builders = 2;
         
         //dictionary to keep track of the amount of each role
         var num_creeps = {
@@ -21,21 +21,25 @@ module.exports = {
         };
         
         //creep_components will get higher and higher as more and more extensions are put in place
-        var creep_components = {
-            "harvester": [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE], //700 + 50 extra
-            "upgrader": [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],  //700 + 50 extra
-            "builder": [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE]    //700 + 50 extra
+        var creep_components = { //1100 to spare at least, soon to be 1300 
+            "fat_harvester": [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE], //1000 + 
+            "harvester": [WORK, WORK, WORK, WORK,  CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE], //900
+            "upgrader": [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],  //1000 + 
+            "builder": [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE]    //850 + 
         };
         
         //loop to change max_creeps if necessary, count num of current creeps, and commit suicide
         for (let name in Game.creeps)
         {
             //if there are no construction sites: less builders more harvesters
+            /*
             if(Game.creeps[name].pos.findClosestByPath(FIND_CONSTRUCTION_SITES) == null)
             {
-                max_upgraders = 6;
+                //ax_upgraders = 6;
                 max_builders = 2;
             }
+            */
+            
             
             //count how many creeps there are of every role
             if(Game.creeps[name].memory.role == "undefined")
@@ -66,21 +70,23 @@ module.exports = {
         //this is where the creeps are spawned if theyre are not enough current creeps in the room
         if (spawny.energy >= 250 && num_creeps.harvester < max_harvesters)
         {
-            spawny.spawnCreep(creep_components["harvester"], "fat_harvey" + Math.floor(Math.random() * 1000), {memory: {role: "harvester"}});
+            if (spawny.spawnCreep(creep_components["fat_harvester"], "fat_harvey" + Math.floor(Math.random() * 1000), {memory: {role: "harvester"}}) == -6 && Object.keys(Game.creeps).length < 8)
+            {
+                spawny.spawnCreep(creep_components["harvester"], "fat_harvey" + Math.floor(Math.random() * 1000), {memory: {role: "harvester"}});
+                console.log("mini harvey");
+            }
             console.log("max harveys: " + max_harvesters);
-            num_creeps.harvester++;
             console.log("# of harveys: " + num_creeps.harvester);
         } else if (spawny.energy >= 250 && num_creeps.builder < max_builders)
         {
             spawny.spawnCreep(creep_components["builder"], "fat_bob" + Math.floor(Math.random() * 1000), {memory: {role: "builder"}});
             console.log("max builders: " + max_builders);
-            num_creeps.builder++;
             console.log("# of builders: " + num_creeps.builder);
         } else if (spawny.energy >= 250 && num_creeps.upgrader < max_upgraders)
         {
             spawny.spawnCreep(creep_components["upgrader"], "fat_uppity" + Math.floor(Math.random() * 1000), {memory: {role: "upgrader"}});
             console.log("max upgraders: " + max_upgraders);
-            num_creeps.upgrader++;
+            //num_creeps.upgrader++;
             console.log("# of upgraders: " + num_creeps.upgrader);
         }else {
             

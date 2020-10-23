@@ -1,6 +1,13 @@
 module.exports = {
     run: function(tower)
     {
+        var hostiles = Game.spawns.SPAWNY.room.find(FIND_HOSTILE_CREEPS);
+        //console.log(hostiles[0]);
+        if (hostiles[0] != undefined)
+        {
+            tower.attack(hostiles[0]);
+        } else 
+        {
         //create an array of all the structures that can be healed
         var repairs = Game.spawns.SPAWNY.room.find(FIND_STRUCTURES, {
             filter: object => object.hits < object.hitsMax
@@ -11,5 +18,6 @@ module.exports = {
         
         //repair those structures
         tower.repair(repairs[0]);
+        }
     }
 };
