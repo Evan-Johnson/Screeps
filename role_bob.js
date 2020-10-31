@@ -9,6 +9,7 @@ module.exports = {
         var return_loc2 = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (s) => (s.structureType == STRUCTURE_TOWER) && s.energy < s.energyCapacity
         }, "astar");
+        //var return_loc3 = room.controller;
             
         if (creep.memory.twerking)
         {

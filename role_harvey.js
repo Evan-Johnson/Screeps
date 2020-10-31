@@ -2,9 +2,10 @@ var getGold = require('get_gold');
 var returnGold = require('return_gold');
 
 module.exports = {
-    run: function(creep)
+    run: function(creep, spawn)
     {
-        var return_loc1 = Game.spawns["SPAWNY"];
+        var return_loc1 = spawn;
+        //console.log(spawn);
         var return_loc2 = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: (s) => (s.structureType == STRUCTURE_EXTENSION) && s.energy < s.energyCapacity
         });
